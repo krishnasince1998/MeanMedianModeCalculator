@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Mobile Statistics Calculator</title>
+    <style>
+        /* General styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .calculator {
+            width: 100%;
+            max-width: 360px;
+            background: #222;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Display screen */
+        .screen {
+            background: #444;
+            color: #fff;
+            font-size: 1.5rem;
+            padding: 16px;
+            box-sizing: border-box;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        .screen span {
+            width: 100%;
+        }
+
+        /* Buttons container */
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #333;
+            width: 100%;
+        }
+
+        /* Buttons */
+        .button {
+            padding: 20px;
+            background: #555;
+            color: #fff;
+            font-size: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button:hover {
+            background: #666;
+        }
+
+        .button.clear {
+            background: #f44336;
+        }
+
+        .button.equal {
+            background: #4caf50;
+            grid-column: span 4;
+        }
+
+        /* Responsive font sizes */
+        @media (max-width: 768px) {
+            .screen {
+                font-size: 1.25rem;
+            }
+
+            .button {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .screen {
+                font-size: 1rem;
+                height: 120px;
+            }
+
+            .button {
+                font-size: 0.9rem;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calculator">
+        <!-- Display Screen -->
+        <div class="screen" id="screen">
+            <span id="numbersDisplay"></span>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <div class="button" onclick="addNumber('1')">1</div>
+            <div class="button" onclick="addNumber('2')">2</div>
+            <div class="button" onclick="addNumber('3')">3</div>
+            <div class="button" onclick="addNumber(',')">,</div>
+            <div class="button" onclick="addNumber('4')">4</div>
+            <div class="button" onclick="addNumber('5')">5</div>
+            <div class="button" onclick="addNumber('6')">6</div>
+            <div class="button clear" onclick="clearScreen()">C</div>
+            <div class="button" onclick="addNumber('7')">7</div>
+            <div class="button" onclick="addNumber('8')">8</div>
+            <div class="button" onclick="addNumber('9')">9</div>
+            <div class="button" onclick="addNumber('0')">0</div>
+            <div class="button equal" onclick="calculate()">Calculate</div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for Calculator Functionality
+        let inputNumbers = '';
+
+        function addNumber(value) {
+            inputNumbers += value;
+            document.getElementById('numbersDisplay').textContent = inputNumbers;
+        }
+
+        function clearScreen() {
+            inputNumbers = '';
+            document.getElementById('numbersDisplay').textContent = '';
+        }
+
+        function calculate() {
+            if (!inputNumbers.trim()) {
+                alert("Please enter some numbers.");
+                return;
+            }
+
+            const numbers = inputNumbers.split(',').map(num => parseFloat(num.trim()));
+
+            if (numbers.some(isNaN)) {
+                document.getElementById('numbersDisplay').textContent = 'Invalid input. Please enter valid numbers.';
+                return;
+            }
+
+            const mean = numbers.reduce((acc, num) => acc + num, 0) / numbers.length;
+
+            const sortedNumbers = [...numbers].sort((a, b) => a - b);
+            const median =
+                sortedNumbers.length % 2 === 0
+                    ? (sortedNumbers[sortedNumbers.length / 2 - 1] + sortedNumbers[sortedNumbers.length / 2]) / 2
+                    : sortedNumbers[Math.floor(sortedNumbers.length / 2)];
+
+            const frequency = {};
+            numbers.forEach(num => (frequency[num] = (frequency[num] || 0) + 1));
+            const maxFrequency = Math.max(...Object.values(frequency));
+            const mode = Object.keys(frequency)
+                .filter(key => frequency[key] === maxFrequency)
+                .map(Number);
+
+            document.getElementById('numbersDisplay').textContent =
+                `Mean: ${mean.toFixed(2)}, Median: ${median.toFixed(2)}, Mode: ${mode.length === 1 ? mode[0] : 'No Mode'}`;
+        }
+    </script>
+</body>
+
+</html>
