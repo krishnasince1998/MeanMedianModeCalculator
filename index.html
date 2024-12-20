@@ -176,7 +176,7 @@
                 .map(Number);
 
             document.getElementById('numbersDisplay').textContent =
-                `Mean: ${mean.toFixed(2)}, Median: ${median.toFixed(2)}, Mode: ${mode.length === 1 ? mode[0] : 'No Mode'}`;
+                `Mean: ${mean.toFixed(2)}, Median: ${median.toFixed(2)}, Mode: ${mode.length > 1 ? mode.join(', ') : mode[0]}`;
         }
     </script>
 </body>
