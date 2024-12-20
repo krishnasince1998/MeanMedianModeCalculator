@@ -160,23 +160,30 @@
                 return;
             }
 
+            // Calculate Mean
             const mean = numbers.reduce((acc, num) => acc + num, 0) / numbers.length;
 
+            // Calculate Median
             const sortedNumbers = [...numbers].sort((a, b) => a - b);
             const median =
                 sortedNumbers.length % 2 === 0
                     ? (sortedNumbers[sortedNumbers.length / 2 - 1] + sortedNumbers[sortedNumbers.length / 2]) / 2
                     : sortedNumbers[Math.floor(sortedNumbers.length / 2)];
 
+            // Calculate Mode
             const frequency = {};
             numbers.forEach(num => (frequency[num] = (frequency[num] || 0) + 1));
             const maxFrequency = Math.max(...Object.values(frequency));
+
             const mode = Object.keys(frequency)
-                .filter(key => frequency[key] === maxFrequency)
+                .filter(key => frequency[key] === maxFrequency && maxFrequency > 1)
                 .map(Number);
 
+            const modeDisplay = mode.length > 0 ? mode.join(', ') : "No mode";
+
+            // Display Results
             document.getElementById('numbersDisplay').textContent =
-                `Mean: ${mean.toFixed(2)}, Median: ${median.toFixed(2)}, Mode: ${mode.length > 1 ? mode.join(', ') : mode[0]}`;
+                `Mean: ${mean.toFixed(2)}, Median: ${median.toFixed(2)}, Mode: ${modeDisplay}`;
         }
     </script>
 </body>
